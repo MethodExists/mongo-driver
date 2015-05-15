@@ -2,7 +2,6 @@
 A basic mongodb native driver which works with promises instead of callbacks.
 
 ## Basic usage
-How to find a client with some criteria.
 ```
 var driver = require("mongo-driver");
 driver.connect("mongodb://localhost:27017/test").
@@ -25,14 +24,15 @@ then(function(db){
 
 
 ## connect()
-It starts the connection with database and returns a mongo database class instance.
+Starts the connection with database and returns a mongo database class instance.
 
 ## Params
-connection <string> //example: "mongodb://<host>:<port>/<dbname>"
+connection *string* (`"mongodb://host:port/dbname"`)
+
 ## Returns
-- promise of:
-  - db <object> instance of mongo database class.
-  
+- promise of db object instance of mongo database class.
+
+
 ### Basic usage
 ```
 var driver = require("mongo-driver");
@@ -50,16 +50,15 @@ then(function(db){
 it find one or many records according with a criteria and fields definition
 
 ### Params
-  -collection   <string> collection name
-  -query        <object> key/value pair where key is field, and value is the criteria for search
-  -options      <object> key/value pair which can contain:
-    -fields     <object> key/value pair where key is field and value can be 1|true or 0|false
-    -limit      <number> rows limit for querying
-    -skip       <number> offset, this says from where it is going to retrieve rows.
-    -sort       <array>  array of arrays, where ['field', 'asc'|'desc'].
+- collection   *string* collection name
+- query        *object* key/value pair where key is field, and value is the criteria for search
+- options      *object* key/value pair which can contain:
+  - fields     *object* key/value pair where key is field and value can be 1|true or 0|false
+  - limit      *number* rows limit for querying
+  - skip       *number* offset, this says from where it is going to retrieve rows.
+  - sort       *array*  array of arrays, where ['field', 'asc'|'desc'].
 ### Returns
-  -promise of:
-    -<[document]> array of documents that match with query
+- promise of [document] array of documents that match with query
 
 ### Basic usage
 ```
@@ -85,16 +84,15 @@ db.find(
 return number of documents that a query matches
 
 ### Params
-  -collection   <string> collection name
-  -query        <object> key/value pair where key is field, and value is the criteria for search
-  -options      <object> key/value pair which can contain:
-    -fields     <object> key/value pair where key is field and value can be 1|true or 0|false
-    -limit      <number> rows limit for querying
-    -skip       <number> offset, this says from where it is going to retrieve rows.
-    -sort       <array>  array of arrays, where ['field', 'asc'|'desc'].
+- collection   *string* collection name
+- query        *object* key/value pair where key is field, and value is the criteria for search
+- options      *object* key/value pair which can contain:
+  - fields     *object* key/value pair where key is field and value can be 1|true or 0|false
+  - limit      *number* rows limit for querying
+  - skip       *number* offset, this says from where it is going to retrieve rows.
+  - sort       *array*  array of arrays, where ['field', 'asc'|'desc'].
 ### Returns
-  -promise of:
-    -<[int]> count of documents matched by query
+- promise of [int] count of documents matched by query
 
 ### Basic usage
 ```
@@ -110,11 +108,12 @@ db.count(
 inserts a mongo document, this maps with mongo-native driver insert, but with a promise.
 
 ### Params
-  -collection    <string>                 collection name
-  -docs          <document>|[<document>]  document or array of documents that will be inserted
+- collection    *string*                 collection name
+- docs          *document*|[*document*]  document or array of documents that will be inserted
+
 ### Returns
-  -promise of
-    -<[object]> an array of inserted documents
+- promise of [object] an array of inserted documents
+
 ### Basic usage
 ```
 db.insert(
@@ -151,17 +150,16 @@ db.insert(
 updates one document according with query
 
 ### Params
-  -collection   <string>  collection name
-  -query        <object>  key/value pair where key is field name and value is the criteria
-  -body         <object>  key/value pair where key is field name
-                            note: if you not provide $set: {}, body will override
-                            current document body.
-  -options      <object>  key/value pair which can contain:
-    -w          <number>  write concern (most used value=1), check mongo db doc.
-    -multi      <bool>    if just one or many documents were be updated
+- collection   *string*  collection name
+- query        *object*  key/value pair where key is field name and value is the criteria
+- body         *object*  key/value pair where key is field name
+                          note: if you not provide $set: {}, body will override
+                          current document body.
+- options      *object*  key/value pair which can contain:
+  - w          *number*  write concern (most used value=1), check mongo db doc.
+  - multi      *bool*    if just one or many documents were be updated
 ### Returns
-  -promise of:
-    -count      <number>  the number of updated records.
+- promise of count      *number*  the number of updated records.
 
 ### Basic usage:
 ```
@@ -191,13 +189,12 @@ It updates many documents matching with query.
   but only will change specified fields
 
 ### Params
-  -collection   <string>  collection name
-  -query        <object>  key/value pair where key is name of the field
-                            and value is the criteria for search
-  -body         <object>  key/value pair where key is name of the field
+- collection   *string*  collection name
+- query        *object*  key/value pair where key is name of the field
+                          and value is the criteria for search
+- body         *object*  key/value pair where key is name of the field
 ### Returns
-  -promise of
-    -count      <number>  the number of updated records
+- promise of count      *number*  the number of updated records
 
 ### Basic usage
 ```
@@ -221,11 +218,10 @@ It saves a document. If _id is provided in document body, then document is updat
   It maps to mongo-native driver function, but with a promise.
 
 ### Params
-  -collecction  <string> collection name
-  -document     <object> the document body. (it can have _id)
+- collecction  *string* collection name
+- document     *object* the document body. (it can have _id)
 ### Returns
-  -promise of
-    -document   <object>|<number> if _id was not provided, and then it was an insertion,
+- promise of document   *object*|*number* if _id was not provided, and then it was an insertion,
                                     it will return the document with "_id" field.
                                     Otherwise it will return 1 if existing document was updated
 ### Basic usage
@@ -259,11 +255,12 @@ for save one document, it forces document param to have _id.
   it overrides existing document body for new one.
 
 ### Params
-  -collection   <string> collection name
-  -document     <object> key/value pair where key is field name, it must have _id field.
+- collection   *string* collection name
+- document     *object* key/value pair where key is field name, it must have _id field.
+
 ### Returns
-  -promise of
-    -document   <object> returns the same document it was delivered
+- promise of document   *object* returns the same document it was delivered
+
 ### Basic usage
 ```
 db.saveComplete(
@@ -284,11 +281,12 @@ for save one document, it forces document param to have _id.
   it only replaces provided fields for existing document.
 
 ### Params
-  -collection   <string> collection name
-  -document     <object> key/value pair where key is field name, it must have _id field.
+- collection   *string* collection name
+- document     *object* key/value pair where key is field name, it must have _id field.
+
 ### Returns
-  -promise of
-    - updateResult
+- promise of updateResult
+
 ### Basic usage
 ```
 db.saveUpdates(
@@ -305,11 +303,12 @@ db.saveUpdates(
 it removes a single document from database, _id must be provided
 
 ### Params
-  -collection   <string> collection name
-  -document     <object> key/value pair where key is field name, it must have _id field.
+- collection   *string* collection name
+- document     *object* key/value pair where key is field name, it must have _id field.
+
 ### Returns
-  -promise of
-    -count      <number> 1 if record was removed
+- promise of count *number* (1 if record was removed)
+
 ### Basic usage
 ```
 db.removeSingle(
@@ -327,12 +326,13 @@ db.removeSingle(
 it removes all documents that match with query
 
 ### Params
-  -collection   <string> collection name
-  -query        <object> key/value pair where key is the field name,
+- collection   *string* collection name
+- query        *object* key/value pair where key is the field name,
                           and value is the criteria for search
+                          
 ### Returns
-  -promise of
-    -count      <number> number of records that were removed from database
+- promise of count      *number* number of records that were removed from database
+
 ### Basic usage
 ```
 //remove just one document (same as removeSingle)
