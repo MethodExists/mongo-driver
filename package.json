@@ -1,6 +1,6 @@
 {
   "name": "mongo-driver",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A wrapper around mongo native that uses promises instead of callbacks",
   "main": "mongo-driver.js",
   "scripts": {
@@ -11,14 +11,12 @@
     "mongodb": "2.0.31",
     "when": "3.6.3"
   },
-
   "devDependencies": {
     "chai": "1.10.0",
     "mocha": "2.0.1",
     "chai-as-promised": "4.1.1"
   },
-
-  "repository": { 
+  "repository": {
     "type": "git",
     "url": "http://github.com/MethodExists/mongo-driver"
   },
