@@ -1,0 +1,39 @@
+{
+  "name": "mongo-driver",
+  "version": "1.0.0",
+  "description": "A wrapper around mongo native that uses promises instead of callbacks",
+  "main": "mongo-driver.js",
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha --ui bdd --reporter spec --recursive tests/"
+  },
+  "dependencies": {
+    "check-types": "1.4.0",
+    "mongodb": "2.0.9",
+    "when": "3.6.3"
+  },
+
+  "devDependencies": {
+    "chai": "1.10.0",
+    "mocha": "2.0.1",
+    "chai-as-promised": "4.1.1"
+  },
+
+  "repository": { 
+    "type": "git",
+    "url": "http://github.com/MethodExists/mongo-driver"
+  },
+  "keywords": [
+    "mongo",
+    "driver",
+    "promises",
+    "wrapper"
+  ],
+  "author": "Alejandro Gomez, Mark Sergienko, MethodExists",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MethodExists/mongo-driver/issues"
+  },
+  "homepage": "https://github.com/MethodExists/mongo-driver",
+  "readme": "",
+  "readmeFilename": "README.md"
+}
