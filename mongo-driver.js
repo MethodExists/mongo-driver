@@ -65,7 +65,7 @@ driver.connect = function(connection) {
   };
 
   /*
-  
+  count
   */
   db.count = function(collection, query, options){
 
@@ -94,12 +94,39 @@ driver.connect = function(connection) {
       else {
         defer.resolve(res);
       }
-    })
+    });
 
     return defer.promise;
   };
 
-  /* Write Docs */
+
+  /*
+  distinct
+  */
+  db.distinct = function(collection, field, query){
+
+    check.verify.unemptyString(collection,
+      "Invalid collection param, must be non empty string in mongo-driver distinct");
+    check.verify.object(query,
+      "Invalid query param, must be object in mongo-driver distinct");
+
+    var defer = when.defer();
+
+    this._mongodb.collection(collection).distinct(field, query, function (err, res) {
+      if (err) {
+        defer.reject(err);
+      }
+      else {
+        defer.resolve(res);
+      }
+    });
+
+    return defer.promise;
+  };
+
+  /*
+    aggregate
+  */
   db.aggregate = function( collection, array ){
 
     check.verify.unemptyString(collection,

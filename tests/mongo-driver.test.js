@@ -317,6 +317,42 @@ describe("mongo-driver", function(){
 
     });
 
+    describe("distinct", function(){
+
+
+      it("should get results", function(done){
+        var p = db.distinct(
+          "book",
+          "title",
+          {}
+        );
+
+        p.should.eventually.be.an("array").to.be.deep.
+          eql(
+            [ "The pragmatic programmer",
+              "The Lord of the rings",
+              "Dra-cool-la",
+              "Harry Potter",
+              "47 Ronin" ]
+        ).notify(done);
+      });
+
+      it("works with query", function(done) {
+        var p = db.distinct(
+          "book",
+          "title",
+          {authors: "J.R.R. Tolkien"}
+        );
+
+        p.should.eventually.be.an("array").to.be.deep.
+          eql(
+            [
+              "The Lord of the rings"
+            ]
+        ).notify(done);
+      });
+    });
+
     describe("update", function(){
 
       it("throws error if no collection provided", function(){
