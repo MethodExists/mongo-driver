@@ -96,7 +96,7 @@ Fetches the first document that matches the query according with a criteria and 
 
 ### Basic usage
 ```
-db.find(
+db.findOne(
   "client",
   {
     name: /john/i
