@@ -7,9 +7,9 @@
     "test": "./node_modules/mocha/bin/mocha --ui bdd --reporter spec --recursive tests/"
   },
   "dependencies": {
-    "check-types": "1.4.0",
+    "check-types": "3.2.0",
     "mongodb": "2.0.31",
-    "when": "3.6.3"
+    "when": "3.7.3"
   },
   "devDependencies": {
     "chai": "1.10.0",
