@@ -80,6 +80,40 @@ db.find(
 ```
 
 
+## findOne()
+Fetches the first document that matches the query according with a criteria and fields definition
+
+### Params
+- collection   *string* collection name
+- query        *object* key/value pair where key is field, and value is the criteria for search
+- options      *object* key/value pair which can contain:
+  - fields     *object* key/value pair where key is field and value can be 1|true or 0|false
+  - limit      *number* rows limit for querying
+  - skip       *number* offset, this says from where it is going to retrieve rows.
+  - sort       *array*  array of arrays, where ['field', 'asc'|'desc'].
+### Returns
+- promise of [document] that match with query or null if there's no match
+
+### Basic usage
+```
+db.findOne(
+  "client",
+  {
+    name: /john/i
+  },
+  {
+    fields: {
+      name: 1,
+      age: 1,
+      occupation: 1
+    }
+  }
+).then(function(item){
+  //item is the first object of matched documents.
+});
+```
+
+
 ## count()
 return number of documents that a query matches
 
@@ -329,7 +363,7 @@ it removes all documents that match with query
 - collection   *string* collection name
 - query        *object* key/value pair where key is the field name,
                           and value is the criteria for search
-                          
+
 ### Returns
 - promise of count      *number* number of records that were removed from database
 

@@ -17,7 +17,7 @@ var mongoclient   = require("mongodb").MongoClient,
 */
 driver.connect = function(connection) {
 
-  check.verify.unemptyString(connection,
+  check.assert.unemptyString(connection,
     "Invalid connection param, must be a non empty string");
   if (!(/^(mongodb\:\/\/)([\w\.]+|([0-9]{1,3}\.){3}[0-9]{1,3})(\:\d+\/\w+)(\?.*)?$/i).
       test(connection)) {
@@ -31,16 +31,16 @@ driver.connect = function(connection) {
 
 
   /*
-  
+  find
   */
   db.find = function(collection, query, options){
 
-    check.verify.unemptyString(collection,
+    check.assert.unemptyString(collection,
       "Invalid collection param, must be non empty string");
-    check.verify.object(query,
+    check.assert.object(query,
       "Invalid query param, must be object");
     if (options) {
-      check.verify.object(options, "Invalid options param, must be object");
+      check.assert.object(options, "Invalid options param, must be object");
     }
 
     options = options || {};
@@ -65,16 +65,55 @@ driver.connect = function(connection) {
   };
 
   /*
+  findOne
+  */
+  db.findOne = function(collection, query, options){
+
+    check.assert.string(collection,
+      "Invalid collection param, must be non empty string");
+    check.assert.unemptyString(collection,
+      "Invalid collection param, must be non empty string");
+    check.assert.object(query,
+      "Invalid query param, must be object");
+    if(options) {
+      check.assert.object(options,
+        "Invalid options param, must be object");
+    }
+
+    options = options || {};
+
+    var fields = options.fields || {};
+    if (options.fields) {
+      delete options.fields;
+    }
+
+    var defer = when.defer();
+
+    this._mongodb.collection(collection).
+      findOne(query, fields, options, function (err, res) {
+        if (err) {
+          defer.reject(err);
+        }
+        else {
+          defer.resolve(res);
+        }
+    });
+
+    return defer.promise;
+
+  };
+
+  /*
   count
   */
   db.count = function(collection, query, options){
 
-    check.verify.unemptyString(collection,
+    check.assert.unemptyString(collection,
       "Invalid collection param, must be non empty string in mongo-driver count");
-    check.verify.object(query,
+    check.assert.object(query,
       "Invalid query param, must be object in mongo-driver count");
     if (options) {
-      check.verify.object(options, "Invalid options param, must be object in mongo-driver count");
+      check.assert.object(options, "Invalid options param, must be object in mongo-driver count");
     }
 
     options = options || {};
@@ -105,9 +144,9 @@ driver.connect = function(connection) {
   */
   db.distinct = function(collection, field, query){
 
-    check.verify.unemptyString(collection,
+    check.assert.unemptyString(collection,
       "Invalid collection param, must be non empty string in mongo-driver distinct");
-    check.verify.object(query,
+    check.assert.object(query,
       "Invalid query param, must be object in mongo-driver distinct");
 
     var defer = when.defer();
@@ -129,7 +168,7 @@ driver.connect = function(connection) {
   */
   db.aggregate = function( collection, array ){
 
-    check.verify.unemptyString(collection,
+    check.assert.unemptyString(collection,
       "Invalid collection param, must be non empty string in mongo-driver count");
 
     var defer = when.defer();
@@ -147,11 +186,11 @@ driver.connect = function(connection) {
   };
 
   /*
-  
+
   */
   db.insert = function(collection, docs){
 
-    check.verify.unemptyString(collection,
+    check.assert.unemptyString(collection,
       "Invalid collection param, must be non empty string");
     if (!check.object(docs) && !check.array(docs)){
       throw new Error("Invalid docs param, must be an array or an object");
@@ -172,18 +211,18 @@ driver.connect = function(connection) {
   };
 
   /*
-  
+
   */
   db.update = function(collection, query, body, options){
 
-    check.verify.unemptyString(collection,
+    check.assert.unemptyString(collection,
       "Invalid collection param, must be non empty string");
-    check.verify.object(query,
+    check.assert.object(query,
       "Invalid query param, must be object");
-    check.verify.object(body,
+    check.assert.object(body,
       "Invalid body param, must be object");
     if (options) {
-      check.verify.object(options, "Invalid options param, must be object");
+      check.assert.object(options, "Invalid options param, must be object");
     }
 
     var defer = when.defer();
@@ -201,15 +240,15 @@ driver.connect = function(connection) {
   };
 
   /*
-  
+
   */
   db.multiUpdate = function(collection, query, body){
 
-    check.verify.unemptyString(collection,
+    check.assert.unemptyString(collection,
       "Invalid collection param, must be non empty string");
-    check.verify.object(query,
+    check.assert.object(query,
       "Invalid query param, must be object");
-    check.verify.object(body,
+    check.assert.object(body,
       "Invalid body param, must be object");
 
     var defer = when.defer(),
@@ -235,13 +274,13 @@ driver.connect = function(connection) {
   };
 
   /*
-  
+
   */
   db.save = function(collection, document){
 
-    check.verify.unemptyString(collection,
+    check.assert.unemptyString(collection,
       "Invalid collection param, must be non empty string");
-    check.verify.object(document,
+    check.assert.object(document,
       "Invalid document param, must be object");
 
     var defer = when.defer(),
@@ -262,13 +301,13 @@ driver.connect = function(connection) {
   };
 
   /*
-  
+
   */
   db.saveComplete = function(collection, document){
 
-    check.verify.unemptyString(collection,
+    check.assert.unemptyString(collection,
       "Invalid collection param, must be non empty string");
-    check.verify.object(document,
+    check.assert.object(document,
       "Invalid document param, must be object");
     if (!document.hasOwnProperty("_id")) {
       throw new Error("Invalid document param, must have _id");
@@ -281,13 +320,13 @@ driver.connect = function(connection) {
   };
 
   /*
-  
+
   */
   db.saveUpdates = function(collection, document){
 
-    check.verify.unemptyString(collection,
+    check.assert.unemptyString(collection,
       "Invalid collection param, must be non empty string");
-    check.verify.object(document,
+    check.assert.object(document,
       "Invalid document param, must be object");
     if (!document.hasOwnProperty("_id")) {
       throw new Error("Invalid document param, must have _id");
@@ -312,13 +351,13 @@ driver.connect = function(connection) {
   };
 
   /*
-  
+
   */
   db.removeSingle = function(collection, document){
 
-    check.verify.unemptyString(collection,
+    check.assert.unemptyString(collection,
       "Invalid collection param, must be non empty string");
-    check.verify.object(document,
+    check.assert.object(document,
       "Invalid document param, must be object");
 
     if (!document.hasOwnProperty("_id")) {
@@ -346,13 +385,13 @@ driver.connect = function(connection) {
   };
 
   /*
-  
+
   */
   db.removeMultiple = function(collection, query){
 
-    check.verify.unemptyString(collection,
+    check.assert.unemptyString(collection,
       "Invalid collection param, must be non empty string");
-    check.verify.object(query,
+    check.assert.object(query,
       "Invalid query param, must be object");
 
     var defer = when.defer(),

@@ -78,7 +78,7 @@ describe("mongo-driver", function(){
               done(err);
             }
             else {
-              done();  
+              done();
             }
           }
         );
@@ -127,7 +127,7 @@ describe("mongo-driver", function(){
 
       it("should insert a document", function(done){
         db.insert(
-          "book", 
+          "book",
           {
             title: "The pragmatic programmer",
             authors: ["Andy Hunt", "David Thomas"]
@@ -137,7 +137,7 @@ describe("mongo-driver", function(){
 
       it("should insert many documents", function(done){
         var p = db.insert(
-          "book", 
+          "book",
           [
             {
               title: "The Lord of the rings",
@@ -239,7 +239,82 @@ describe("mongo-driver", function(){
       });
 
     });
-    
+
+    describe("findOne", function(){
+
+      it("throws error if no collection provided", function(){
+        expect( db.findOne ).to.throw(Error, /invalid\s+collection/i );
+      });
+
+      it("throws error if collection is not a string", function(){
+        expect( db.findOne.bind(db, 4) ).
+          to.throw(Error, /invalid\s+collection/i );
+        expect( db.findOne.bind(db, true) ).
+          to.throw(Error, /invalid\s+collection/i );
+        expect( db.findOne.bind(db, "") ).
+          to.throw(Error, /invalid\s+collection/i );
+        expect( db.findOne.bind(db, {}) ).
+          to.throw(Error, /invalid\s+collection/i );
+        expect( db.findOne.bind(db, []) ).
+          to.throw(Error, /invalid\s+collection/i );
+        expect( db.findOne.bind(db, new Date()) ).
+          to.throw(Error, /invalid\s+collection/i );
+      });
+
+      it("throws error if no query provided", function(){
+        expect( db.findOne.bind(db, "book") ).
+          to.throw(Error, /invalid\s+query/i );
+      });
+
+      it("throws error if query is not object", function(){
+        expect( db.findOne.bind(db, "book", "somestring") )
+          .to.throw(Error, /invalid\s+query/i );
+        expect( db.findOne.bind(db, "book", 4) )
+          .to.throw(Error, /invalid\s+query/i );
+        expect( db.findOne.bind(db, "book", true) )
+          .to.throw(Error, /invalid\s+query/i );
+        expect( db.findOne.bind(db, "book", []) )
+          .to.throw(Error, /invalid\s+query/i );
+        expect( db.findOne.bind(db, "book", new Date()) )
+          .to.throw(Error, /invalid\s+query/i );
+      });
+
+      it("throws error if options is not object", function(){
+        expect( db.findOne.bind(db, "book", {}, "somestring") )
+          .to.throw(Error, /invalid\s+options/i );
+        expect( db.findOne.bind(db, "book", {}, 4) )
+          .to.throw(Error, /invalid\s+options/i );
+        expect( db.findOne.bind(db, "book", {}, true) )
+          .to.throw(Error, /invalid\s+options/i );
+        expect( db.findOne.bind(db, "book", {}, []) )
+          .to.throw(Error, /invalid\s+options/i );
+        expect( db.findOne.bind(db, "book", {}, new Date()) )
+          .to.throw(Error, /invalid\s+options/i );
+      });
+
+      it("throws null if no matches", function(done){
+        db.findOne(
+          "book",
+          {
+            title: "nonexisting"
+          }
+        ).
+          should.eventually.equal(null).notify(done);
+      });
+
+      it("should find one document", function(done){
+        var p = db.findOne(
+          "book",
+          {
+            title: /lord/i
+          }
+        );
+        p.should.eventually.be.an("object").notify(done);
+
+      });
+
+    });
+
     describe("count", function(){
 
       it("throws error if no collection provided", function(){
@@ -716,7 +791,7 @@ describe("mongo-driver", function(){
                 _id: bookId,
                 published: 1954
               }
-            ).then(function(){ 
+            ).then(function(){
               return db.find(
                 "book",
                 {
