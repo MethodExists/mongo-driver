@@ -1,6 +1,6 @@
 {
   "name": "mongo-driver",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "A wrapper around mongo native that uses promises instead of callbacks",
   "main": "mongo-driver.js",
   "scripts": {
