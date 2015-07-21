@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "check-types": "3.2.0",
-    "mongodb": "2.0.31",
+    "mongodb": "2.0.39",
     "when": "3.7.3"
   },
   "devDependencies": {
