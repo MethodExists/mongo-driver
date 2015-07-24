@@ -663,6 +663,24 @@ describe("mongo-driver", function(){
         });
       });
 
+      it("works when you save with _id unmodified", function(done) {
+        var p;
+        db.find(
+          "book",
+          {
+            title: /dracula/i
+          }
+        ).then(function(books){
+          p = db.save(
+            "book",
+            books[0]
+          );
+          p.should.eventually.be.an("number").
+            should.eventually.equals(0).notify(done);
+        });
+
+      });
+
     });
 
     describe("saveComplete", function(){

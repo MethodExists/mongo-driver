@@ -293,7 +293,11 @@ driver.connect = function(connection) {
         defer.reject(err);
       }
       else {
-        defer.resolve(data.result.nModified ? data.result.nModified : data.ops[0]);
+        defer.resolve(
+          data.ops && data.ops[0] ?
+            data.ops[0] :
+            data.result.nModified
+        );
       }
     });
 
