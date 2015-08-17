@@ -20,23 +20,20 @@ describe("mongo-driver", function(){
 
   describe("connection", function(){
 
-    it("throws error if connection is not provided", function(){
-      expect( driver.connect.bind(driver) ).
-        to.throw(Error, /non[\s\w]+empty[\s\w]+string/i );
-    });
 
     it("throws error if connection is malformed", function(){
       var conns = [
+        "",
         "537f6fd2d11fa3c6054a8068",
-        "localhost:27017/test",
-        "mongodb://localhost:27017",
-        "mongodb://:27017/test",
-        "mongodb://:ADF/test"
+        "some nonesense"
       ];
       conns.forEach(function(e){
-        expect( driver.connect.bind(driver, e) ).
-          to.throw(Error, /invalid\sconnection\sparam/i );
+        driver.connect(e).should.be.rejected;
       });
+    });
+
+    it("does not reject when url includes username and password", function(done){
+      driver.connect("mongodb://me_development:unoDosNahTr3s@localhost:27017").should.be.rejectedWith('Authentication failed').notify(done);
     });
 
 

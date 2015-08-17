@@ -17,18 +17,9 @@ var mongoclient   = require("mongodb").MongoClient,
 */
 driver.connect = function(connection) {
 
-  check.assert.unemptyString(connection,
-    "Invalid connection param, must be a non empty string");
-  if (!(/^(mongodb\:\/\/)([\w\.]+|([0-9]{1,3}\.){3}[0-9]{1,3})(\:\d+\/\w+)(\?.*)?$/i).
-      test(connection)) {
-    throw new Error(
-      "Invalid connection param, must be in form of mongodb://<host>:<port>/<dbname>"
-    );
-  }
 
   var connect = node.lift(mongoclient.connect),
-      db      = {};
-
+      db = {};
 
   /*
   find
