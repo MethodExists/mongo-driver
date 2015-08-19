@@ -247,17 +247,21 @@ db.multiUpdate(
 
 
 ## save()
-It saves a document. If _id is provided in document body, then document is updated,
-  otherwise, it is inserted
-  It maps to mongo-native driver function, but with a promise.
+Saves a document.
+If _id is provided in document body, then document is updated, otherwise, it is inserted.
+It maps to mongo-native driver function, but with a promise.
 
 ### Params
 - collecction  *string* collection name
 - document     *object* the document body. (it can have _id)
+
 ### Returns
-- promise of document   *object*|*number* if _id was not provided, and then it was an insertion,
-                                    it will return the document with "_id" field.
-                                    Otherwise it will return 1 if existing document was updated
+- promise of nrModified   *number* | *object*
+
+Returns promise of 0 if document was not modified.
+Returns promise of 1 if document was modified
+Returns promise of document object if document was inserted
+
 ### Basic usage
 ```
 //saving a non existing document
@@ -267,9 +271,10 @@ db.save(
     title: "Javascript 101",
     authors: ["java ninja dev"]
 
-).then(function(doc){
-  //document with _id field
+).then(function(obj){
+  console.log(obj._id);
 });
+
 //saving an existing document
 db.save(
   "book",
@@ -278,8 +283,8 @@ db.save(
     title: "jQuery for newbies",
     author: "some jQuery guru"
   }
-).then(function(doc){
-  //doc will be 1
+).then(function(nrModified){
+  // number of modified records (0 or 1)
 });
 ```
 

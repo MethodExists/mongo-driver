@@ -16,27 +16,25 @@ var driver  = require("../mongo-driver"),
 describe("mongo-driver", function(){
 
   var conn = "mongodb://localhost:27017/test",
+      connObj = {auto_reconnect: true, slaveOk: true },
       db;
 
   describe("connection", function(){
 
-    it("throws error if connection is not provided", function(){
-      expect( driver.connect.bind(driver) ).
-        to.throw(Error, /non[\s\w]+empty[\s\w]+string/i );
-    });
 
     it("throws error if connection is malformed", function(){
       var conns = [
+        "",
         "537f6fd2d11fa3c6054a8068",
-        "localhost:27017/test",
-        "mongodb://localhost:27017",
-        "mongodb://:27017/test",
-        "mongodb://:ADF/test"
+        "some nonesense"
       ];
       conns.forEach(function(e){
-        expect( driver.connect.bind(driver, e) ).
-          to.throw(Error, /invalid\sconnection\sparam/i );
+        driver.connect(e).should.be.rejected;
       });
+    });
+
+    it("does not reject when url includes username and password", function(done){
+      driver.connect("mongodb://me_development:unoDosNahTr3s@localhost:27017").should.be.rejectedWith('Authentication failed').notify(done);
     });
 
 
@@ -55,6 +53,16 @@ describe("mongo-driver", function(){
 
     it("connect succesfuly with: " + conn, function(done){
       driver.connect(conn).
+        then(function(_db){
+          db = _db; //passing to global reference (trick)
+          return _db;
+        }).
+        should.eventually.contain.keys("find","insert").
+          notify(done);
+    });
+
+    it("connect succesfuly with: " + conn + " and connectionObject:" + connObj, function(done){
+      driver.connect(conn, connObj).
         then(function(_db){
           db = _db; //passing to global reference (trick)
           return _db;
@@ -661,6 +669,24 @@ describe("mongo-driver", function(){
           p.should.eventually.be.an("number").
             should.eventually.equals(1).notify(done);
         });
+      });
+
+      it("works when you save with _id unmodified", function(done) {
+        var p;
+        db.find(
+          "book",
+          {
+            title: /dracula/i
+          }
+        ).then(function(books){
+          p = db.save(
+            "book",
+            books[0]
+          );
+          p.should.eventually.be.an("number").
+            should.eventually.equals(0).notify(done);
+        });
+
       });
 
     });
