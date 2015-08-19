@@ -16,6 +16,7 @@ var driver  = require("../mongo-driver"),
 describe("mongo-driver", function(){
 
   var conn = "mongodb://localhost:27017/test",
+      connObj = {auto_reconnect: true, slaveOk: true },
       db;
 
   describe("connection", function(){
@@ -52,6 +53,16 @@ describe("mongo-driver", function(){
 
     it("connect succesfuly with: " + conn, function(done){
       driver.connect(conn).
+        then(function(_db){
+          db = _db; //passing to global reference (trick)
+          return _db;
+        }).
+        should.eventually.contain.keys("find","insert").
+          notify(done);
+    });
+
+    it("connect succesfuly with: " + conn + " and connectionObject:" + connObj, function(done){
+      driver.connect(conn, connObj).
         then(function(_db){
           db = _db; //passing to global reference (trick)
           return _db;

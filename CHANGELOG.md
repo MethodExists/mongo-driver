@@ -1,4 +1,8 @@
-1.2.0 
+1.3.0
+-----------------
+- Added connection object with additional connection settings
+
+1.2.0
 -----------------
 - Added findOne method. Thanks @youanswer.
 

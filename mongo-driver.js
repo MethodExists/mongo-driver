@@ -15,7 +15,7 @@ var mongoclient   = require("mongodb").MongoClient,
 /*
 
 */
-driver.connect = function(connection) {
+driver.connect = function(connection, connectionObject) {
 
 
   var connect = node.lift(mongoclient.connect),
@@ -407,7 +407,7 @@ driver.connect = function(connection) {
   };
 
   //connect with mongodb via native driver and return db custom object.
-  return connect(connection).then(function(mongodb){
+  return connect(connection, connectionObject).then(function(mongodb){
 
     db._mongodb = mongodb;
 
